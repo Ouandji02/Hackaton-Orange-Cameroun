@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   Box,
@@ -57,19 +57,31 @@ export default function TranslatorInterface({ mode }: Props) {
   const [dataTranslate, setDataTranslate] = useState("");
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === "french-text") {
-      axios
-        .post("/api/translate", { text: value })
-        .then((response) => {
-          setDataTranslate(response.data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          alert("Une erreur s'est produite lors de la traduction.");
-        });
-    }
+    const { value } = event.target;
+    setQuery(value)
   };
+
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (query.trim() !== '') {
+        axios
+          .post("https://6cda-102-244-200-98.ngrok-free.app/translate", { text: query })
+          .then((response) => {
+            setDataTranslate(response.data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Une erreur s'est produite lors de la traduction.");
+          });
+      }
+    }, 500); // délai en ms avant de faire la requête
+
+    // Nettoyage : si l'utilisateur retape avant 500ms
+    return () => clearTimeout(delayDebounce);
+
+  }, [query]);
 
   return (
     <>
@@ -85,16 +97,15 @@ export default function TranslatorInterface({ mode }: Props) {
         maxWidth="lg"
       >
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Card
               variant="outlined"
               sx={{
                 p: 2,
                 display: "flex",
                 alignItems: "center",
-                border: `1px solid ${
-                  onglet === 1 ? "#ff6600" : "text.secondary"
-                }`,
+                border: `1px solid ${onglet === 1 ? "#ff6600" : "text.secondary"
+                  }`,
                 borderRadius: 2,
                 cursor: "pointer",
                 height: "100%",
@@ -119,7 +130,7 @@ export default function TranslatorInterface({ mode }: Props) {
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Card
               variant="outlined"
               sx={{
@@ -129,9 +140,8 @@ export default function TranslatorInterface({ mode }: Props) {
                 borderRadius: 2,
                 cursor: "pointer",
                 height: "100%",
-                border: `1px solid ${
-                  onglet === 2 ? "#ff6600" : "text.secondary"
-                }`,
+                border: `1px solid ${onglet === 2 ? "#ff6600" : "text.secondary"
+                  }`,
                 color: onglet === 2 ? "#ff6600" : "black",
               }}
               onClick={() => setOnglet(2)}
@@ -160,7 +170,7 @@ export default function TranslatorInterface({ mode }: Props) {
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Card
               variant="outlined"
               sx={{
