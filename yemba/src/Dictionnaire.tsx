@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -33,6 +33,7 @@ import {
   Translate as TranslateIcon,
 } from "@mui/icons-material";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
+import { dict } from "./dict";
 
 // Création d'un thème Material UI
 
@@ -54,29 +55,27 @@ export default function DictionaryApp({ mode }: Props) {
     "comment ça va",
   ]);
   const theme = useTheme();
+  const [wordSearch, setWordSearch] = useState<any>();
 
   // Simulated results for demonstration
-  const wordResult = wordSearchValue
+  const wordResult = wordSearch
     ? {
-        word: wordSearchValue,
-        phonetic: "/example/",
+        word: wordSearch.mot,
+        phonetic: wordSearch.forme,
         translations: [
           {
             pos: "nom",
-            meanings: ["example translation 1", "example translation 2"],
+            meanings: wordSearch.traductions ?? [],
           },
-          { pos: "verbe", meanings: ["example verb translation"] },
+          { pos: "verbe", meanings: [] },
         ],
         examples: [
           "Voici un exemple de phrase avec ce mot.",
           "Un autre exemple d'utilisation.",
         ],
+        conjugaisons: wordSearch.conjugaisons,
       }
     : null;
-
-  const translatedText = textToTranslate
-    ? "This is where the translated text would appear. The actual translation functionality would need to be implemented with an API."
-    : "";
 
   const handleWordSearch = () => {
     if (wordSearchValue && !searchHistory.includes(wordSearchValue)) {
@@ -84,15 +83,20 @@ export default function DictionaryApp({ mode }: Props) {
     }
   };
 
-  const handleSwapLanguages = () => {
-    const temp = sourceLanguage;
-    setSourceLanguage(targetLanguage);
-    setTargetLanguage(temp);
-  };
-
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
+
+  React.useEffect(() => {
+    if (wordSearchValue) {
+      const find = dict.find((item) => item.mot === wordSearchValue);
+      if (find) {
+        setWordSearch(find);
+      } else {
+        setWordSearch(null);
+      }
+    }
+  }, [wordSearchValue]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -109,7 +113,7 @@ export default function DictionaryApp({ mode }: Props) {
               component="h1"
               sx={{ flexGrow: 1, fontWeight: "bold" }}
             >
-              Dictionnaire
+              Dictionnaire Yemba
             </Typography>
           </Toolbar>
         </AppBar>
@@ -145,7 +149,9 @@ export default function DictionaryApp({ mode }: Props) {
                     fullWidth
                     placeholder="Entrez un mot..."
                     value={wordSearchValue}
-                    onChange={(e) => setWordSearchValue(e.target.value)}
+                    onChange={(e) => {
+                      setWordSearchValue(e.target.value);
+                    }}
                     onKeyDown={(e) => e.key === "Enter" && handleWordSearch()}
                     InputProps={{
                       startAdornment: (
@@ -253,13 +259,13 @@ export default function DictionaryApp({ mode }: Props) {
                       color="text.secondary"
                       gutterBottom
                     >
-                      Exemples
+                      Conjugaisons
                     </Typography>
                     <List dense disablePadding>
-                      {wordResult.examples.map((example, i) => (
+                      {wordResult.conjugaisons.map((example, i) => (
                         <ListItem key={i} sx={{ pl: 2 }}>
                           <ListItemText
-                            primary={example}
+                            primary={`${example.mode} : ${example.forme}`}
                             primaryTypographyProps={{
                               component: "div",
                               variant: "body1",
@@ -275,126 +281,10 @@ export default function DictionaryApp({ mode }: Props) {
                       ))}
                     </List>
                   </Box>
+
+                  <Divider sx={{ my: 2 }} />
                 </Paper>
               )}
-            </Box>
-          )}
-
-          {/* Traducteur Tab */}
-          {activeTab === 1 && (
-            <Box p={3}>
-              <Paper elevation={0} variant="outlined" sx={{ p: 3 }}>
-                <Typography variant="h6" gutterBottom>
-                  Traduire du texte
-                </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Entrez du texte pour le traduire d'une langue à une autre
-                </Typography>
-
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 2, my: 3 }}
-                >
-                  <FormControl size="small" sx={{ minWidth: 150 }}>
-                    <InputLabel id="source-language-label">
-                      Langue source
-                    </InputLabel>
-                    <Select
-                      labelId="source-language-label"
-                      value={sourceLanguage}
-                      label="Langue source"
-                      onChange={(e) => setSourceLanguage(e.target.value)}
-                    >
-                      <MenuItem value="fr">Français</MenuItem>
-                      <MenuItem value="en">Anglais</MenuItem>
-                      <MenuItem value="es">Espagnol</MenuItem>
-                      <MenuItem value="de">Allemand</MenuItem>
-                      <MenuItem value="it">Italien</MenuItem>
-                    </Select>
-                  </FormControl>
-
-                  <IconButton
-                    onClick={handleSwapLanguages}
-                    color="primary"
-                    sx={{ p: 1 }}
-                  >
-                    <SwapHorizIcon />
-                  </IconButton>
-
-                  <FormControl size="small" sx={{ minWidth: 150 }}>
-                    <InputLabel id="target-language-label">
-                      Langue cible
-                    </InputLabel>
-                    <Select
-                      labelId="target-language-label"
-                      value={targetLanguage}
-                      label="Langue cible"
-                      onChange={(e) => setTargetLanguage(e.target.value)}
-                    >
-                      <MenuItem value="en">Anglais</MenuItem>
-                      <MenuItem value="fr">Français</MenuItem>
-                      <MenuItem value="es">Espagnol</MenuItem>
-                      <MenuItem value="de">Allemand</MenuItem>
-                      <MenuItem value="it">Italien</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Texte à traduire
-                    </Typography>
-                    <TextField
-                      fullWidth
-                      multiline
-                      rows={8}
-                      placeholder="Entrez votre texte ici..."
-                      value={textToTranslate}
-                      onChange={(e) => setTextToTranslate(e.target.value)}
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Traduction
-                    </Typography>
-                    <Paper
-                      variant="outlined"
-                      sx={{
-                        height: "100%",
-                        minHeight: "195px",
-                        p: 2,
-                        bgcolor: "action.hover",
-                        display: "flex",
-                        alignItems: translatedText ? "flex-start" : "center",
-                        justifyContent: translatedText
-                          ? "flex-start"
-                          : "center",
-                      }}
-                    >
-                      {translatedText ? (
-                        <Typography>{translatedText}</Typography>
-                      ) : (
-                        <Typography color="text.secondary">
-                          La traduction apparaîtra ici...
-                        </Typography>
-                      )}
-                    </Paper>
-                  </Grid>
-                </Grid>
-
-                <Box
-                  sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={!textToTranslate}
-                  >
-                    Traduire
-                  </Button>
-                </Box>
-              </Paper>
             </Box>
           )}
         </Paper>
