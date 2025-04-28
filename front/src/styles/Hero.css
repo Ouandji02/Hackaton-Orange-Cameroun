@@ -1,0 +1,100 @@
+/* Base styles pour le body et background animé */
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background-color: #f3f0ff;
+  position: relative;
+}
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  width: 150%;
+  height: 150%;
+  background: linear-gradient(to right, #a78bfa 0%, #f0abfc 50%, #a78bfa 100%);
+  opacity: 0.6;
+  border-radius: 50%;
+  animation: wave 10s infinite linear;
+  z-index: -1;
+}
+
+body::before {
+  top: -50%;
+  left: -25%;
+  transform: translate3d(0, 0, 0) rotate(0deg);
+}
+
+body::after {
+  bottom: -50%;
+  right: -25%;
+  transform: translate3d(0, 0, 0) rotate(180deg);
+  animation-delay: -5s;
+  opacity: 0.4;
+}
+
+/* Animation des vagues */
+@keyframes wave {
+  0% {
+    transform: translate3d(-50%, 0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(50%, 0, 0) rotate(360deg);
+  }
+}
+
+/* Styles pour la section Hero */
+.hero-section-container {
+  display: flex;
+  flex-direction: column; /* Mobile-first : en colonne */
+  align-items: center;
+  justify-content: center;
+  padding-top: 150px;
+  padding-bottom: 150px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  text-align: center; /* centrer le texte sur petit écran */
+}
+
+/* Texte de la section Hero */
+.hero-text-content {
+  width: 90%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+/* Image de la section Hero */
+.hero-image-container img {
+  width: 90%;
+  max-width: 500px;
+  border-radius: 1rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive : Sur écran moyen et grand */
+@media (min-width: 768px) {
+  .hero-section-container {
+    flex-direction: row; /* Passe en ligne */
+    align-items: center;
+    justify-content: space-between;
+    text-align: left; /* réaligne le texte à gauche sur grand écran */
+  }
+
+  .hero-text-content {
+    margin-bottom: 0; /* enlève l'espacement inutile entre texte et image */
+  }
+
+  .hero-image-container img {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+
+.img-fluid{
+
+  height: 350px;
+}
