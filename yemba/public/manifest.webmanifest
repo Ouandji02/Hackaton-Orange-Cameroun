@@ -1,0 +1,47 @@
+{
+    "name": "Mon Application React",
+    "short_name": "MonApp",
+    "description": "Ma super application PWA avec React",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+      {
+        "src": "pwa-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "pwa-192x192.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any"
+      },
+      {
+        "src": "pwa-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "maskable"
+      },
+      {
+        "src": "pwa-192x192.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "maskable"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "screenshot1.png",
+        "sizes": "1280x720",
+        "type": "image/png",
+        "description": "Capture d'écran de l'accueil"
+      }
+    ],
+    "categories": ["productivity", "utilities"],
+    "lang": "fr-FR",
+    "dir": "ltr",
+    "orientation": "portrait-primary"
+  }

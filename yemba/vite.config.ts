@@ -26,6 +26,17 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,json}'],
+        globIgnores: [
+          '**/node_modules/**',
+          '**/sw.js',
+          '**/workbox-*.js'
+        ]
+      },
+      devOptions: {
+        enabled: true // Active le PWA en mode développement pour tester
       }
     })
   ],

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import "./App.css";
 import TranslatorInterface from "./Translator";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Brightness4 as DarkModeIcon,
   Brightness7 as LightModeIcon,
@@ -117,6 +117,14 @@ function App() {
     setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
 
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+      })
+    }
+  }, [])
+
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
@@ -129,15 +137,12 @@ function App() {
           sx={{
             minHeight: "100vh",
             minWidth: "100vh",
-            backgroundImage: `linear-gradient(${
-              theme.palette.background.default
-            } 1px, transparent 1px), linear-gradient(90deg, ${
-              theme.palette.background.default
-            } 1px, ${
-              mode === "light"
+            backgroundImage: `linear-gradient(${theme.palette.background.default
+              } 1px, transparent 1px), linear-gradient(90deg, ${theme.palette.background.default
+              } 1px, ${mode === "light"
                 ? "rgba(0, 0, 0, 0.02)"
                 : "rgba(255, 255, 255, 0.02)"
-            } 1px)`,
+              } 1px)`,
             backgroundSize: "80px 80px",
             backgroundPosition: "-1px -1px",
           }}
