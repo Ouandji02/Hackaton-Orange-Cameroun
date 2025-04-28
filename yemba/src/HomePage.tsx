@@ -1,299 +1,433 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Container,
   Box,
-  Card,
-  CardContent,
-  Grid,
   Button,
-  useMediaQuery,
-  useTheme,
+  Container,
+  Grid,
+  Typography,
+  ThemeProvider,
   CssBaseline,
-} from "@mui/material"
-import {
-  Home as HomeIcon,
-  ViewModule as ViewModuleIcon,
-  Lightbulb as LightbulbIcon,
-  Speed as SpeedIcon,
-  Security as SecurityIcon,
-  Devices as DevicesIcon,
-  Support as SupportIcon,
-  Analytics as AnalyticsIcon,
-} from "@mui/icons-material"
-import { ThemeProvider, createTheme } from "@mui/material/styles"
+  Chip,
+  Stack,
+  useTheme,
+} from "@mui/material";
+import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
+import TestimonialsSection from "./testimonial";
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#1976d2",
-    },
-    secondary: {
-      main: "#f50057",
-    },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    h2: {
-      fontWeight: 700,
-      fontSize: "2.5rem",
-      marginBottom: "1rem",
-    },
-    h4: {
-      fontWeight: 600,
-      marginBottom: "0.5rem",
-    },
-    body1: {
-      fontSize: "1.1rem",
-      lineHeight: 1.6,
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          textTransform: "none",
-          fontWeight: 600,
-          padding: "8px 24px",
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 12,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-          transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-          "&:hover": {
-            transform: "translateY(-5px)",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
-          },
-        },
-      },
-    },
-  },
-})
-
-const featureCards = [
-  {
-    title: "Design Intuitif",
-    description: "Interface utilisateur simple et intuitive pour une expérience utilisateur optimale.",
-    icon: <LightbulbIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: "Performance",
-    description: "Optimisé pour des temps de chargement rapides et une expérience fluide.",
-    icon: <SpeedIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: "Sécurité",
-    description: "Protection des données et sécurité avancée pour votre tranquillité d'esprit.",
-    icon: <SecurityIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: "Responsive",
-    description: "S'adapte parfaitement à tous les appareils, du mobile au desktop.",
-    icon: <DevicesIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: "Support 24/7",
-    description: "Notre équipe est disponible à tout moment pour vous aider.",
-    icon: <SupportIcon fontSize="large" color="primary" />,
-  },
-  {
-    title: "Analytiques",
-    description: "Suivez vos performances avec des outils d'analyse détaillés.",
-    icon: <AnalyticsIcon fontSize="large" color="primary" />,
-  },
-]
-
-export default function Home() {
-  const [activeSection, setActiveSection] = useState("accueil")
-  const [scrolled, setScrolled] = useState(false)
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true)
-      } else {
-        setScrolled(false)
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  const scrollToSection = (section) => {
-    setActiveSection(section)
-    const element = document.getElementById(section)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
+type Props = {
+  mode: "dark" | "light";
+};
+export default function SaaSifyLanding({ mode }: Props) {
+  const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar
-          position="fixed"
-          color="default"
-          elevation={scrolled ? 4 : 0}
+      <Box
+        id="home"
+        sx={{
+          minHeight: "100vh",
+          minWidth: "100vh",
+          backgroundSize: "80px 80px",
+          backgroundPosition: "-1px -1px",
+        }}
+      >
+        <Container sx={{ mt: { xs: 8, md: 12 }, mb: 10, textAlign: "center" }}>
+          <Box sx={{ maxWidth: 900, mx: "auto" }}>
+            <Typography variant="h1" component="h1" gutterBottom>
+              Boost ton expérience avec Tradora
+            </Typography>
+
+            <Typography
+              variant="subtitle1"
+              sx={{ mt: 3, mb: 6, maxWidth: 800, mx: "auto" }}
+            >
+              L'ultime plateforme IA pour traduire, écouter, comprendre et
+              apprendre la langue Yemba. Explorez des outils puissants réunis
+              dans une seule application pour repousser vos limites
+            </Typography>
+
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              justifyContent="center"
+              sx={{ mb: 5 }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                endIcon={<ArrowForwardIcon />}
+                onClick={() => navigate("/translate")}
+              >
+                Essayer Gratuitement
+              </Button>
+            </Stack>
+          </Box>
+        </Container>
+
+        <Box
+          id="apps"
           sx={{
-            backgroundColor: scrolled ? "rgba(255, 255, 255, 0.95)" : "transparent",
-            transition: "all 0.3s ease",
+            py: 10,
+            margin: "0 auto",
+            backgroundColor:
+              mode === "light"
+                ? "rgba(0, 0, 0, 0.01)"
+                : "rgba(255, 255, 255, 0.01)",
           }}
         >
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: "bold" }}>
-              MonSite
-            </Typography>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Button
-                color="inherit"
-                startIcon={<HomeIcon />}
-                onClick={() => scrollToSection("accueil")}
+          <Container>
+            <Box sx={{ textAlign: "center", mb: 8 }}>
+              <Chip
+                label="Apps"
                 sx={{
-                  borderBottom: activeSection === "accueil" ? "2px solid #1976d2" : "none",
-                  borderRadius: 0,
-                  paddingBottom: "4px",
+                  backgroundColor:
+                    mode === "light"
+                      ? "rgba(0, 0, 0, 0.05)"
+                      : "rgba(255, 255, 255, 0.05)",
+                  color:
+                    mode === "light"
+                      ? "rgba(0, 0, 0, 0.7)"
+                      : "rgba(255, 255, 255, 0.7)",
+                  px: 1,
+                  mb: 3,
                 }}
+              />
+              <Typography variant="h2" component="h2" gutterBottom>
+                Ce dont tu as besoin pour une meilleur expérience
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{ maxWidth: 800, mx: "auto" }}
               >
-                Accueil
-              </Button>
-              <Button
-                color="inherit"
-                startIcon={<ViewModuleIcon />}
-                onClick={() => scrollToSection("fonctionnalites")}
-                sx={{
-                  borderBottom: activeSection === "fonctionnalites" ? "2px solid #1976d2" : "none",
-                  borderRadius: 0,
-                  paddingBottom: "4px",
-                }}
-              >
-                Fonctionnalités
-              </Button>
+                Notre plateforme complète fournit tous les outils dont vous avez
+                besoin pour rationaliser votre flux de travail, augmenter votre
+                productivité et atteindre vos objectifs.
+              </Typography>
             </Box>
-          </Toolbar>
-        </AppBar>
-      </Box>
 
-      {/* Section Accueil */}
-      <Box
-        id="accueil"
-        sx={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          pt: 8,
-        }}
-      >
-        <Container maxWidth="lg">
-          <Grid container spacing={4} alignItems="center" sx={{ flexDirection: { xs: "column", sm: "row" } }}>
-            <Grid item xs={12} sm={6}>
-              <Box sx={{ p: 2 }}>
-                <Typography variant="h2" component="h1" gutterBottom>
-                  Bienvenue sur notre plateforme innovante
-                </Typography>
-                <Typography variant="body1" paragraph sx={{ mb: 4 }}>
-                  Nous proposons des solutions modernes et efficaces pour répondre à tous vos besoins. Notre approche
-                  centrée sur l'utilisateur garantit une expérience exceptionnelle.
-                </Typography>
-                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    color="primary"
-                    onClick={() => scrollToSection("fonctionnalites")}
+            <Grid container spacing={1}>
+              {/* Feature 1 */}
+
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Link to="/translate">
+                  <Box
+                    sx={{
+                      p: 4,
+                      height: "100%",
+                      borderRadius: 4,
+                      border: `1px solid ${
+                        mode === "light"
+                          ? "rgba(0, 0, 0, 0.08)"
+                          : "rgba(255, 255, 255, 0.08)"
+                      }`,
+                      transition: "transform 0.3s, box-shadow 0.3s",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        boxShadow:
+                          mode === "light"
+                            ? "0 10px 30px rgba(0,0,0,0.05)"
+                            : "0 10px 30px rgba(0,0,0,0.2)",
+                      },
+                    }}
                   >
-                    Découvrir nos fonctionnalités
-                  </Button>
-                  <Button variant="outlined" size="large" color="primary">
-                    En savoir plus
-                  </Button>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  p: 2,
-                }}
-              >
-                <Box
-                  component="img"
-                  src="/placeholder.svg?height=400&width=500"
-                  alt="Image d'accueil"
-                  sx={{
-                    maxWidth: "100%",
-                    height: "auto",
-                    borderRadius: 4,
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-                  }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Section Fonctionnalités */}
-      <Box
-        id="fonctionnalites"
-        sx={{
-          minHeight: "100vh",
-          py: 10,
-          backgroundColor: "#f8f9fa",
-        }}
-      >
-        <Container maxWidth="lg">
-          <Box sx={{ textAlign: "center", mb: 8 }}>
-            <Typography variant="h2" component="h2" gutterBottom>
-              Nos Fonctionnalités
-            </Typography>
-            <Typography variant="body1" sx={{ maxWidth: "800px", mx: "auto" }}>
-              Découvrez les fonctionnalités qui font de notre plateforme un outil indispensable pour votre succès.
-            </Typography>
-          </Box>
-
-          <Grid container spacing={4}>
-            {featureCards.map((card, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card sx={{ height: "100%" }}>
-                  <CardContent sx={{ p: 4, textAlign: "center" }}>
-                    <Box sx={{ mb: 2 }}>{card.icon}</Box>
-                    <Typography variant="h5" component="h3" gutterBottom>
-                      {card.title}
+                    <Box
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: "50%",
+                        backgroundColor: "rgba(51, 102, 255, 0.1)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mb: 2,
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{ color: "primary.main", fontSize: "1.5rem" }}
+                      >
+                        ⚡
+                      </Box>
+                    </Box>
+                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                      Traduction
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {card.description}
+                    <Typography color="text.secondary">
+                      Un traduction instantanée et précise de vos textes et
+                      documents
                     </Typography>
-                  </CardContent>
-                </Card>
+                  </Box>
+                </Link>
               </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
 
-      {/* Footer */}
-      <Box sx={{ bgcolor: "#1976d2", color: "white", py: 4 }}>
-        <Container maxWidth="lg">
-          <Typography variant="body2" align="center">
-            © {new Date().getFullYear()} MonSite. Tous droits réservés.
-          </Typography>
-        </Container>
+              {/* Feature 2 */}
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Link to="/dict">
+                  <Box
+                    sx={{
+                      p: 4,
+                      height: "100%",
+                      borderRadius: 4,
+                      border: `1px solid ${
+                        mode === "light"
+                          ? "rgba(0, 0, 0, 0.08)"
+                          : "rgba(255, 255, 255, 0.08)"
+                      }`,
+                      transition: "transform 0.3s, box-shadow 0.3s",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        boxShadow:
+                          mode === "light"
+                            ? "0 10px 30px rgba(0,0,0,0.05)"
+                            : "0 10px 30px rgba(0,0,0,0.2)",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: "50%",
+                        backgroundColor: "rgba(51, 102, 255, 0.1)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mb: 2,
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{ color: "primary.main", fontSize: "1.5rem" }}
+                      >
+                        📊
+                      </Box>
+                    </Box>
+                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                      Dictionnaire
+                    </Typography>
+                    <Typography color="text.secondary">
+                      Avec son dictionnaire, vous pouvez explorer les mots et
+                      leurs significations dans le contexte de la langue
+                    </Typography>
+                  </Box>
+                </Link>
+              </Grid>
+
+              {/* Feature 3 */}
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Box
+                  sx={{
+                    p: 4,
+                    height: "100%",
+                    borderRadius: 4,
+                    border: `1px solid ${
+                      mode === "light"
+                        ? "rgba(0, 0, 0, 0.08)"
+                        : "rgba(255, 255, 255, 0.08)"
+                    }`,
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow:
+                        mode === "light"
+                          ? "0 10px 30px rgba(0,0,0,0.05)"
+                          : "0 10px 30px rgba(0,0,0,0.2)",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: "50%",
+
+                      backgroundColor: "rgba(51, 102, 255, 0.1)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mb: 2,
+                    }}
+                  >
+                    <Box
+                      component="span"
+                      sx={{ color: "primary.main", fontSize: "1.5rem" }}
+                    >
+                      👥
+                    </Box>
+                  </Box>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    Education et diverstissement
+                  </Typography>
+                  <Typography color="text.secondary">
+                    Apprenez la langue Yemba à travers des jeux et des quizs
+                  </Typography>
+                </Box>
+              </Grid>
+
+              {/* Feature 4 */}
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Box
+                  sx={{
+                    p: 4,
+                    height: "100%",
+                    borderRadius: 4,
+                    border: `1px solid ${
+                      mode === "light"
+                        ? "rgba(0, 0, 0, 0.08)"
+                        : "rgba(255, 255, 255, 0.08)"
+                    }`,
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow:
+                        mode === "light"
+                          ? "0 10px 30px rgba(0,0,0,0.05)"
+                          : "0 10px 30px rgba(0,0,0,0.2)",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: "50%",
+                      backgroundColor: "rgba(51, 102, 255, 0.1)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mb: 2,
+                    }}
+                  >
+                    <Box
+                      component="span"
+                      sx={{ color: "primary.main", fontSize: "1.5rem" }}
+                    >
+                      🛡️
+                    </Box>
+                  </Box>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    Historique culturelle
+                  </Typography>
+                  <Typography color="text.secondary">
+                    Explorez la culture Yemba à travers des histoires et des
+                    traditions
+                  </Typography>
+                </Box>
+              </Grid>
+
+              {/* Feature 5 */}
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Box
+                  sx={{
+                    p: 4,
+                    height: "100%",
+                    borderRadius: 4,
+                    border: `1px solid ${
+                      mode === "light"
+                        ? "rgba(0, 0, 0, 0.08)"
+                        : "rgba(255, 255, 255, 0.08)"
+                    }`,
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow:
+                        mode === "light"
+                          ? "0 10px 30px rgba(0,0,0,0.05)"
+                          : "0 10px 30px rgba(0,0,0,0.2)",
+                    },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: "50%",
+                      backgroundColor: "rgba(51, 102, 255, 0.1)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      mb: 2,
+                    }}
+                  >
+                    <Box
+                      component="span"
+                      sx={{ color: "primary.main", fontSize: "1.5rem" }}
+                    >
+                      🔄
+                    </Box>
+                  </Box>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    Géolocalisation
+                  </Typography>
+                  <Typography color="text.secondary">
+                    Découvrez les lieux et les personnes qui parlent la langue
+                    Yemba autour de vous
+                  </Typography>
+                </Box>
+              </Grid>
+
+              {/* Feature 6 */}
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Link to="/">
+                  <Box
+                    sx={{
+                      p: 4,
+                      height: "100%",
+                      borderRadius: 4,
+                      border: `1px solid ${
+                        mode === "light"
+                          ? "rgba(0, 0, 0, 0.08)"
+                          : "rgba(255, 255, 255, 0.08)"
+                      }`,
+                      transition: "transform 0.3s, box-shadow 0.3s",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        boxShadow:
+                          mode === "light"
+                            ? "0 10px 30px rgba(0,0,0,0.05)"
+                            : "0 10px 30px rgba(0,0,0,0.2)",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: "50%",
+                        backgroundColor: "rgba(51, 102, 255, 0.1)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mb: 2,
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{ color: "primary.main", fontSize: "1.5rem" }}
+                      >
+                        ⭐
+                      </Box>
+                    </Box>
+                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                      Ventes et decouvertes
+                    </Typography>
+                    <Typography color="text.secondary">
+                      Découvrez les produits et services de la culture Yemba
+                      autour de vous
+                    </Typography>
+                  </Box>
+                </Link>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
       </Box>
+      <TestimonialsSection mode={mode} />
     </ThemeProvider>
-  )
+  );
 }
